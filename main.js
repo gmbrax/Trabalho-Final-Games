@@ -1,4 +1,10 @@
 /**
+ * @file Arquivo Principal do jogo
+ * @version 0.0.1
+ * @author Gustavo Henrique S. S. de Miranda, Igor Fernandes, Matheus Silveira Polesca, Laura Cardoso
+ */
+
+/**
  * @author Gustavo Henrique S. S. Miranda
  * @class 
  * @classdesc Essa classe inicializa as configurações básicas necessárias para poder iniciar o funcionamento do 
