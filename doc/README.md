@@ -13,4 +13,4 @@ Para gerar a documentação basta seguir os seguintes passos:
 - dentro da pasta execute o comando: ```jsdoc -c conf.json```
 
 ## Como Acessar a documentação gerada
-Assim como o jogo para acessar utilize:http://localhost:porta_liveserver/doc e automaticamente será exibido a documentação que foi gerada, porém para isso antes deve-se gerar usando as instruções dada acima
+Assim como o jogo para acessar utilize:http://localhost:porta_liveserver/doc/out e automaticamente será exibido a documentação que foi gerada, porém para isso antes deve-se gerar usando as instruções dada acima
