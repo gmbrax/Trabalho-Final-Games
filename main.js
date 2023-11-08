@@ -10,6 +10,7 @@
  * @classdesc Essa classe inicializa as configurações básicas necessárias para poder iniciar o funcionamento do 
  * Phaser.js  
  */
+
 class game_config{
     /**
      * @constructs
@@ -18,7 +19,7 @@ class game_config{
      * @param {int} height Altura da tela do jogo
      */
     constructor(width,height){
-        this.type = Phaser.AUTO;
+        this.type = Phaser.AUTO    
         this.width = width;
         this.height = height;
         this.game = null;
@@ -39,28 +40,11 @@ class game_config{
             type:this.type,
             width:this.width,
             height:this.height,
-            scene:{
-                preload:this.preload,
-                create:this.create,
-                update:this.update
-            }
+            scene:[main_game_scene]
+            
         }
     }
-    /**
-     * @description Função que carrega à memoria todas recursos necessários do jogo.
-     * @todo implementar essa função
-     */
-    preload(){}
-      /**
-     * @description Função que cria os recursos  do jogo.
-     * @todo implementar essa função
-     */
-    create(){}
-      /**
-     * @description Função que atualiza os recursos e objetos do jogo dentro do loop do jogo
-     * @todo implementar essa função
-     */
-    update(){}
+
 
 }
 
