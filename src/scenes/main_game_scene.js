@@ -18,6 +18,7 @@ class main_game_scene extends Phaser.Scene {
     */
     constructor() {
         super({ key: 'main' });
+        this.parent_class = null;
 
     }
 
@@ -113,5 +114,9 @@ class main_game_scene extends Phaser.Scene {
             paddleRight.y += speed;
         }
 
+    }
+
+    set_parent_class_callback(callback_class){
+        this.parent_class = callback_class;
     }
 }
