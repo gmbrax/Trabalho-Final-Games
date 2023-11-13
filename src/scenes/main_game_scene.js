@@ -2,6 +2,8 @@
  * @file Arquivo  contendo a cena principal do jogo 
  * @version 0.0.1
  * @author Gustavo Henrique S. S. de Miranda
+*/
+
 /**
  * 
  * @class 
@@ -34,6 +36,7 @@ class main_game_scene extends Phaser.Scene {
 
     /**
     * @description Essa função cria os recursos usados na cena
+    * @author Gustavo Henrique Miranda, Laura Cardoso
     */
     create() {
         //BALL
@@ -63,7 +66,13 @@ class main_game_scene extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
     }
-
+    /**
+     * @description essa função é chamada a cada iteração do loop do jogo.
+     * @author Laura Cardoso
+     * @todo alterar o controle dos paddles para ser controlado individualmente.
+     * @todo adicionar o reset da bola e o sistema de pontuação
+     * 
+     */
 
     update() {
         //BALL
