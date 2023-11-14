@@ -19,6 +19,8 @@ class main_game_scene extends Phaser.Scene {
     constructor() {
         super({ key: 'main' });
         this.parent_class = null;
+        this.p1_score_board_cached = []
+        this.p2_score_board_cached = []
 
     }
 
@@ -58,13 +60,11 @@ class main_game_scene extends Phaser.Scene {
 
         // OTHERS
         this.add.sprite(510, 390, 'divider_black');
-        this.add.sprite(174, 160, 'Number_Font_White', 9);
-        this.add.sprite(234, 160, 'Number_Font_White', 9);
-        this.add.sprite(294, 160, 'Number_Font_White', 9);
-        this.add.sprite(690, 160, 'Number_Font_White', 9);
-        this.add.sprite(750, 160, 'Number_Font_White', 9);
-        this.add.sprite(810, 160, 'Number_Font_White', 9);
-
+        let p1_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}})
+        let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
+        this.set_cache_p1_score_board(p1_score_board);
+        this.set_cache_p2_score_board(p2_score_board);
+     
         this.cursors = this.input.keyboard.createCursorKeys();
     }
     /**
@@ -116,7 +116,37 @@ class main_game_scene extends Phaser.Scene {
 
     }
 
+    /**
+     * @description Essa função define um callback para classe game_config
+     * @author Gustavo  Henrique Miranda
+     * @param {game_config} callback_class referencia da classe game_config
+     */
     set_parent_class_callback(callback_class){
         this.parent_class = callback_class;
+    }
+
+    /**
+     * 
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
+     * @author Gustavo Henrique Miranda
+     * @param {group} p1_score_board grupo de sprites do scoreboard do player1
+     * 
+     */
+    set_cache_p1_score_board(p1_score_board){
+        p1_score_board.children.iterate(function (child, index) {
+            this.p1_score_board_cached.push(child.frame.name);
+        }, this);
+    }
+
+    /**
+     * 
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
+     * @author Gustavo Henrique Miranda
+     * @param {group} p2_score_board grupo de sprites do scoreboard do player2
+     */
+    set_cache_p2_score_board(p2_score_board){
+        p2_score_board.children.iterate(function (child, index) {
+            this.p2_score_board_cached.push(child.frame.name);
+        }, this);
     }
 }
