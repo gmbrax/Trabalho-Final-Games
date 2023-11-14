@@ -2,6 +2,7 @@
  * @file Arquivo  contendo a cena principal do jogo 
  * @version 0.0.1
  * @author Gustavo Henrique S. S. de Miranda
+ * @todo Corrigir bug no scoreboard em que o numero 1 fica demasiadamente longe dos outros numeros
 */
 
 /**
@@ -64,7 +65,8 @@ class main_game_scene extends Phaser.Scene {
         let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
-     
+        this.update_p1_score_board(p1_score_board,[0,9,9]);
+        this.update_p2_score_board(p2_score_board,[1,9,9])
         this.cursors = this.input.keyboard.createCursorKeys();
     }
     /**
@@ -154,7 +156,7 @@ class main_game_scene extends Phaser.Scene {
      * 
      * @author Gustavo Henrique Miranda
      * @description Essa função retorna um array com os valores do frame do score board do player1
-     * @returns retorna o arry contendo os valores dos frames do score board do player1
+     * @returns retorna o array contendo os valores dos frames do score board do player1
      */
     get_cache_p1_score_board(){
         return this.p1_score_board_cached;
@@ -164,9 +166,37 @@ class main_game_scene extends Phaser.Scene {
      * 
      * @author Gustavo Henrique Miranda
      * @description Essa função retorna um array com os valores do frame do score board do player2
-     * @returns retorna o arry contendo os valores dos frames do score board do player2
+     * @returns retorna o array contendo os valores dos frames do score board do player2
      */
     get_cache_p2_score_board(){
         return this.p2_score_board_cached;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função atualiza o scoreboard do player1 
+     * @param {group} p1_score_board grupo de sprites do score board do 
+     * @param {Array} update_array Array contendo os valores do frames equivalentes ao numero a ser atualizado
+     * 
+     */
+    update_p1_score_board(p1_score_board,update_array){
+        p1_score_board.children.iterate(function(child,index){
+            child.setFrame(update_array[index]);
+        })
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função atualiza o scoreboard do player2 
+     * @param {group} p2_score_board grupo de sprites do score board do 
+     * @param {Array} update_array Array contendo os valores do frames equivalentes ao numero a ser atualizado
+     * 
+     */
+    update_p2_score_board(p2_score_board,update_array){
+        p2_score_board.children.iterate(function(child,index){
+            child.setFrame(update_array[index]);
+        })
     }
 }
