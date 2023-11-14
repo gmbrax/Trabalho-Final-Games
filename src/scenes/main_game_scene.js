@@ -63,10 +63,13 @@ class main_game_scene extends Phaser.Scene {
         this.add.sprite(510, 390, 'divider_black');
         let p1_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}})
         let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
+        this.parent_class.set_player1_score(666);
+        this.parent_class.set_player2_score(999);
+        this.update_p1_score_board(p1_score_board,[9,8,9])
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
-        this.update_p1_score_board(p1_score_board,[0,9,9]);
-        this.update_p2_score_board(p2_score_board,[1,9,9])
+        this.update_both_score_boards(p1_score_board,this.get_cache_p1_score_board(),p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score())
+
         this.cursors = this.input.keyboard.createCursorKeys();
     }
     /**
@@ -198,5 +201,76 @@ class main_game_scene extends Phaser.Scene {
         p2_score_board.children.iterate(function(child,index){
             child.setFrame(update_array[index]);
         })
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função converte um array de digitos em um array de numeros de frame.
+     * @param {Array} digit_array Array contendo os digitos à serem convertidos.
+     * @returns retorna um array com os valores de digito convertido para o seus repectivos valores de frame. 
+     * 
+     */
+    convert_to_frame_number(digit_array){
+        const lut = {0:9,1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8};
+        let result =[];
+        for (let digit of digit_array){
+            console.log(lut[digit])
+            result.push(lut[digit])
+        }
+        console.log(result)
+        return result;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Função que converte um numero em um array contendo esses numeros
+     * @param {Integer} number valor à ser convertido para um array
+     * @returns retorna um array com os numeros
+     * 
+     */
+    convert_integer_to_array(number){
+        let result = []
+        if (number < 999){
+
+        result.push(Math.floor(number / 100));
+        result.push(Math.floor(number / 10));
+        result.push(Math.floor(number % 10 ));
+        return result;
+        }
+        else return null;
+    }
+
+
+    get_p1_current_score(){
+        console.log(this.parent_class.get_player1_score());
+        return this.parent_class.get_player1_score();
+    }
+
+    get_p2_current_score(){
+        console.log(this.parent_class.get_player1_score());
+        return this.parent_class.get_player2_score();
+    }
+
+    compare_current_score_to_scoreboard(current_score,scoreboard){
+        let current_score_array = this.convert_to_frame_number(this.convert_integer_to_array(current_score));
+        let equal_lengths;
+        equal_lengths = (current_score_array.length === scoreboard.length);
+        let equal_items = scoreboard.every((element,index)=> element === current_score_array[index]); 
+        return (equal_lengths && equal_items)
+    }
+
+    update_both_score_boards(p1_score_board,p1_chached_score_board,p2_score_board,p2_cached_score_board,p1_current_score,p2_current_score){
+        if(!this.compare_current_score_to_scoreboard(p1_current_score,p1_chached_score_board)){
+            let p1_current_score_frames = this.convert_to_frame_number(this.convert_integer_to_array(p1_current_score));
+            this.update_p1_score_board(p1_score_board,p1_current_score_frames);
+            this.set_cache_p1_score_board(p1_score_board);
+        }
+        if(!this.compare_current_score_to_scoreboard(p2_current_score,p2_cached_score_board)){
+            let p2_current_score_frames = this.convert_to_frame_number(this.convert_integer_to_array(p2_current_score));
+            this.update_p2_score_board(p2_score_board,p2_current_score_frames);
+            this.set_cache_p2_score_board(p2_score_board);
+        }
     }
 }

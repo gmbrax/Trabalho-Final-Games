@@ -32,7 +32,7 @@ class game_context{
      * 
      */
     get_player1_score(){
-        return this.get_player1_score;
+        return this.player1_score;
     }
 
     /**
@@ -43,7 +43,7 @@ class game_context{
      * 
      */
     get_player2_score(){
-        return this.get_player2_score;
+        return this.player2_score;
     }
 
     /**
@@ -54,7 +54,7 @@ class game_context{
      * 
      */
     set_player1_score(value){
-        this.get_player1_score = value;
+        this.player1_score = value;
     }
 
     /**
@@ -65,7 +65,7 @@ class game_context{
      * 
      */
     set_player2_score(value){
-        this.get_player2_score = value;
+        this.player2_score = value;
     }
 }
 
@@ -184,7 +184,7 @@ class game_config{
      * 
      */
     get_player1_score(){
-        return this.context.get_player1_score();
+        return this.context.get_player1_score()
     }
 
     /**
