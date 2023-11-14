@@ -149,4 +149,24 @@ class main_game_scene extends Phaser.Scene {
             this.p2_score_board_cached.push(child.frame.name);
         }, this);
     }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna um array com os valores do frame do score board do player1
+     * @returns retorna o arry contendo os valores dos frames do score board do player1
+     */
+    get_cache_p1_score_board(){
+        return this.p1_score_board_cached;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna um array com os valores do frame do score board do player2
+     * @returns retorna o arry contendo os valores dos frames do score board do player2
+     */
+    get_cache_p2_score_board(){
+        return this.p2_score_board_cached;
+    }
 }
