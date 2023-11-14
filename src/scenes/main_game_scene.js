@@ -63,12 +63,8 @@ class main_game_scene extends Phaser.Scene {
         this.add.sprite(510, 390, 'divider_black');
         let p1_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}})
         let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
-        this.parent_class.set_player1_score(978);
-        this.parent_class.set_player2_score(360);
-        this.update_p1_score_board(p1_score_board,[9,8,9])
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
-        this.update_both_score_boards(p1_score_board,this.get_cache_p1_score_board(),p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score());
 
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -281,7 +277,7 @@ class main_game_scene extends Phaser.Scene {
         let equal_items = scoreboard.every((element,index)=> element === current_score_array[index]); 
         return (equal_items)
     }
-    
+
     /**
      * 
      * @author Gustavo Henrique Miranda
