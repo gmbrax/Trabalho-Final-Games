@@ -63,12 +63,13 @@ class main_game_scene extends Phaser.Scene {
         this.add.sprite(510, 390, 'divider_black');
         let p1_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}})
         let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
-        this.parent_class.set_player1_score(666);
-        this.parent_class.set_player2_score(999);
+        this.parent_class.set_player1_score(978);
+        this.parent_class.set_player2_score(360);
         this.update_p1_score_board(p1_score_board,[9,8,9])
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
-        this.update_both_score_boards(p1_score_board,this.get_cache_p1_score_board(),p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score())
+        this.update_both_score_boards(p1_score_board,this.get_cache_p1_score_board(),p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score());
+
 
         this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -215,10 +216,8 @@ class main_game_scene extends Phaser.Scene {
         const lut = {0:9,1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8};
         let result =[];
         for (let digit of digit_array){
-            console.log(lut[digit])
             result.push(lut[digit])
         }
-        console.log(result)
         return result;
     }
 
@@ -232,35 +231,70 @@ class main_game_scene extends Phaser.Scene {
      */
     convert_integer_to_array(number){
         let result = []
-        if (number < 999){
+        if (number <= 999){
 
         result.push(Math.floor(number / 100));
-        result.push(Math.floor(number / 10));
+        result.push(Math.floor(number / 10) % 10);
         result.push(Math.floor(number % 10 ));
         return result;
         }
         else return null;
     }
 
-
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna o score atual do player1
+     * @returns retorna um inteiro com o score atual do player1
+     */
     get_p1_current_score(){
-        console.log(this.parent_class.get_player1_score());
+
         return this.parent_class.get_player1_score();
     }
 
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna o score atual do player2
+     * @returns  retorna um inteiro com o score atual do player2
+     */
     get_p2_current_score(){
-        console.log(this.parent_class.get_player1_score());
         return this.parent_class.get_player2_score();
     }
 
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa Função recebe um inteiro para o current score e um array contendo os valores do frame de um scoreboard,
+     * converte o current score para um array de com valores de frame correspondentes e compara os dois arrays e retorna o boolean dessa 
+     * comparação
+     * @param {int} current_score Inteiro correspondendo ao score atual
+     * @param {Array} scoreboard  Array contendo os numeros do frame que estão sendo exibidos
+     * @returns Essa função retorna um boolean true caso os valores seja iguais e retorna false caso contrário, e null caso haja diferença de tamanho entre os arrays 
+     * 
+     */
     compare_current_score_to_scoreboard(current_score,scoreboard){
         let current_score_array = this.convert_to_frame_number(this.convert_integer_to_array(current_score));
-        let equal_lengths;
-        equal_lengths = (current_score_array.length === scoreboard.length);
+        if (!current_score_array.length === scoreboard.length){
+            return null;
+        }
         let equal_items = scoreboard.every((element,index)=> element === current_score_array[index]); 
-        return (equal_lengths && equal_items)
+        return (equal_items)
     }
-
+    
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função checa se o valor armazenado em cache dos arrays de frame os scoreboards estão iguais as pontuações do player1 e player2,
+     *  e caso não atualiza os scoresboard e armazena o valor no cache correspondente ao score board
+     * @param {group} p1_score_board referencia do scoreboard do player1
+     * @param {Array} p1_chached_score_board Valor em cache do array dos frames do scoreboard do player1
+     * @param {group} p2_score_board Referencia do scoreboard do player2
+     * @param {Array} p2_cached_score_board Valor em cache do array de frames do scoreboard do player2
+     * @param {int} p1_current_score Pontuação atual do player1
+     * @param {int} p2_current_score Pontuação atual do player2
+     * 
+     */
     update_both_score_boards(p1_score_board,p1_chached_score_board,p2_score_board,p2_cached_score_board,p1_current_score,p2_current_score){
         if(!this.compare_current_score_to_scoreboard(p1_current_score,p1_chached_score_board)){
             let p1_current_score_frames = this.convert_to_frame_number(this.convert_integer_to_array(p1_current_score));
