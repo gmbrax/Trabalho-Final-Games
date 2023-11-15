@@ -24,9 +24,9 @@ class main_game_scene extends Phaser.Scene {
      */
     preload() {
         this.load.image('paddle_white', 'assets/images/Paddle_White.png');
-        this.load.image('divider_black', '../../assets/images/Divider_Black.png');
-        this.load.image('ball_white', '../../assets/images/Ball_White.png');
-        this.load.spritesheet("Number_Font_White", "../../assets/images/Number_Font_White.png", { frameWidth: 40, frameHeight: 80, spacing: 21 });
+        this.load.image('divider_black', 'assets/images/Divider_Black.png');
+        this.load.image('ball_white', 'assets/images/Ball_White.png');
+        this.load.spritesheet("Number_Font_White", "assets/images/Number_Font_White.png", { frameWidth: 40, frameHeight: 80, spacing: 21 });
 
     }
 
