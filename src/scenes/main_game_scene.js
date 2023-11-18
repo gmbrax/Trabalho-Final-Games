@@ -61,8 +61,10 @@ class main_game_scene extends Phaser.Scene {
 
         // OTHERS
         this.add.sprite(510, 390, 'divider_black');
-        let p1_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}})
-        let p2_score_board = this.add.group({key:'Number_Font_White',frame:9,repeat:2,setXY:{x:690,y:160,stepX:60}})
+        let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
+        let p1_score_board = this.add.group(group_default);
+        group_default['setXY']['x'] = 690;
+        let p2_score_board = this.add.group(group_default);
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
 
