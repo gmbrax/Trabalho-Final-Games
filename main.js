@@ -5,6 +5,71 @@
  */
 
 /**
+ * 
+ * @author Gustavo Henrique Santos Souza de Miranda
+ * @class
+ * @classdesc Essa classe contem as informações do jogo atual, como pontuação de cada jogador
+ * 
+ */
+class game_context{
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @constructs
+     * Esse Construtor define as pontuações do jogadores de forma global
+     */
+    constructor(){
+        this.player1_score = 0;
+        this.player2_score = 0;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função retorna a pontuação atual do player1.
+     * @returns Returna um inteiro com o valor da pontuação do player1.
+     * 
+     */
+    get_player1_score(){
+        return this.player1_score;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função retorna a pontuação atual do player2.
+     * @returns Returna um inteiro com o valor da pontuação do player2.
+     * 
+     */
+    get_player2_score(){
+        return this.player2_score;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função recebe um valor inteiro e o define como a pontuação atual do player1.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player1;
+     * 
+     */
+    set_player1_score(value){
+        this.player1_score = value;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função recebe um valor inteiro e o define como a pontuação atual do player2.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player2;
+     * 
+     */
+    set_player2_score(value){
+        this.player2_score = value;
+    }
+}
+
+/**
  * @author Gustavo Henrique S. S. Miranda
  * @class 
  * @classdesc Essa classe contem os dados referentes a como é feito o escaleamento do jogo e a posição de onde o jogo será renderizado.
@@ -79,15 +144,20 @@ class game_config{
         this.width = width;
         this.height = height;
         this.game = null;
+        this.scene = [new main_game_scene()] // Isso aqui é quase um crime mas pelo menos funciona talvez isso aqui deveria ser uma função
         this.physics = new game_physics();
         this.scale = new game_scaler();
+        this.context = new game_context();
 
     }
     /**
+     * 
      * @description Essa função inicializa a biblioteca Phaser.js apartir dos atributos da classe.
+     * @todo adicionar um for loop para caso que tenha mais de uma cena
      */
     initialize(){
         this.game = new Phaser.Game(this.make_config_object());
+        this.scene[0].set_parent_class_callback(this)
     }
     /**
      * @description Essa Função cria apartir dos atributos da classe um objeto para ser passado para o inicializador do Phaser.js
@@ -99,11 +169,55 @@ class game_config{
             type:this.type,
             width:this.width,
             height:this.height,
-            scene:[main_game_scene],
+            scene:this.scene,
             physics:this.physics.make_physics_object(),
             scale:this.scale.make_scale_object()
             
         }
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado a pontução do player1.
+     * @returns Returna um inteiro com o valor da pontuação do player1.
+     * 
+     */
+    get_player1_score(){
+        return this.context.get_player1_score()
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado a pontução do player2.
+     * @returns Returna um inteiro com o valor da pontuação do player2.
+     * 
+     */
+    get_player2_score(){
+        return this.context.get_player2_score();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro e o define como a pontuação atual do player1.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player1;
+     * 
+     */
+    set_player1_score(value){
+        this.context.set_player1_score(value);
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro e o define como a pontuação atual do player2.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player2;
+     * 
+     */
+    set_player2_score(value){
+        this.context.set_player2_score(value);
     }
 
 
@@ -112,6 +226,8 @@ class game_config{
 /** Para o jogo funcionar se cria um objeto da classe game_config e logo após se chama
  * a função initialize
  * @member {game_config}
+ * @todo separar as classes em arquivos individuais
+ * 
  */
 var main_config = new game_config(1024,768);
 main_config.initialize();
