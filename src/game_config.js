@@ -2,6 +2,11 @@ import game_physics from "./game_physics.js";
 import game_scaler from "./game_scaler.js";
 import game_context from "./game_context.js";
 
+/**
+ * @file Arquivo Contendo a classe de configuração do jogo.
+ * @version 0.0.1
+ * @author Gustavo Henrique S. S. de Miranda,
+ */ 
 
 /**
  * @author Gustavo Henrique S. S. Miranda

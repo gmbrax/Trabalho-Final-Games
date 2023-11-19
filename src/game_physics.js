@@ -1,3 +1,8 @@
+/**
+ * @file Arquivo Contendo a classe de configuração da fisica do jogo
+ * @version 0.0.1
+ * @author Gustavo Henrique S. S. de Miranda,
+ */ 
 
 /**
  * @author Gustavo Henrique S. S. Miranda
