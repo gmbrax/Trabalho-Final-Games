@@ -81,7 +81,7 @@ class main_game_scene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    firstHit = false;
+    firstHit = false; //variavel basicamente indica se ira ou nao bater com a bolinha
     shouldWin = this.randomNumber(0, 10);
 
 
@@ -94,9 +94,7 @@ class main_game_scene extends Phaser.Scene {
     /**
      * @description essa funcao é chamada a cada iteracao do loop do jogo.
      * @author Laura Castro
-     * @todo alterar o controle dos paddles para ser controlado individualmente.
      * @todo adicionar o reset da bola e o sistema de pontuacao
-     * 
      */
     update() {
         //BALL
@@ -118,13 +116,11 @@ class main_game_scene extends Phaser.Scene {
 
 
         //PADDLES
-        //TODO: Ambos os paddles estao funcionando com as mesmas teclas do teclado (up e down)
         const paddleLeft = this.children.getByName('paddleL');
         const paddleRight = this.children.getByName('paddleR');
 
         const speed = 5;
         //left
-
 
         if (ball.x < 61) {
             this.firstHit = true;
