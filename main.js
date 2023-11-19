@@ -3,7 +3,7 @@ import game_config from './game_config.js'
 /**
  * @file Arquivo Principal do jogo
  * @version 0.0.1
- * @author Gustavo Henrique S. S. de Miranda, Igor Fernandes, Matheus Silveira Polesca, Laura Cardoso
+ * @author Gustavo Henrique S. S. de Miranda, Igor Fernandes, Matheus Silveira Polesca, Laura Castro
  */
 
 

@@ -40,7 +40,7 @@ class main_game_scene extends Phaser.Scene {
 
     /**
     * @description Essa função cria os recursos usados na cena
-    * @author Gustavo Henrique Miranda, Laura Cardoso
+    * @author Gustavo Henrique Miranda, Laura Castro
     */
     create() {
         //BALL
@@ -105,9 +105,12 @@ class main_game_scene extends Phaser.Scene {
 
         const speed = 5;
         // left
-        if (this.cursors.up.isDown && paddleLeft.y > 0) {
+
+        
+
+        if (this.cursors.dabliu.isDown && paddleLeft.y > 0) {
             paddleLeft.y -= speed;
-        } else if (this.cursors.down.isDown && paddleLeft.y < this.sys.game.config.height) {
+        } else if (this.cursors.esse.isDown && paddleLeft.y < this.sys.game.config.height) {
             paddleLeft.y += speed;
         }
 
