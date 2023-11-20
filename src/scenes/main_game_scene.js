@@ -63,8 +63,10 @@ class main_game_scene extends Phaser.Scene {
         this.add.sprite(510, 390, 'divider_black');
         let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
         let p1_score_board = this.add.group(group_default);
+        p1_score_board.setName('p1_score_board');
         group_default['setXY']['x'] = 690;
         let p2_score_board = this.add.group(group_default);
+        p2_score_board.setName('p2_score_board')
         this.set_cache_p1_score_board(p1_score_board);
         this.set_cache_p2_score_board(p2_score_board);
 
@@ -117,9 +119,11 @@ class main_game_scene extends Phaser.Scene {
         } else if (this.cursors.down.isDown && paddleRight.y < this.sys.game.config.height) {
             paddleRight.y += speed;
         }
+        let p1_score_board = this.children.getByName('p1_score_board');
+        let p2_score_board = this.children.getByName('p2_score_board');
 
+        this.update_both_score_boards(p1_score_board,this.get_cache_p1_score_board(),p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score());
     }
-
     /**
      * @description Essa função define um callback para classe game_config
      * @author Gustavo  Henrique Miranda
