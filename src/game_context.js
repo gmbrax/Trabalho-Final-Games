@@ -1,3 +1,8 @@
+/**
+ * @file Arquivo Contendo a classe de contexto do jog, contendo os dados dos jogadores
+ * @version 0.0.1
+ * @author Gustavo Henrique S. S. de Miranda,
+ */ 
 
 /**
  * 

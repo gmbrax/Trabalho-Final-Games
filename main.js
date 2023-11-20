@@ -1,4 +1,4 @@
-import game_config from './game_config.js'
+import game_config from './src/game_config.js'
 
 /**
  * @file Arquivo Principal do jogo
