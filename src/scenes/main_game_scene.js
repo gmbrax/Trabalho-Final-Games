@@ -73,7 +73,7 @@ class main_game_scene extends Phaser.Scene {
     }
     /**
      * @description essa função é chamada a cada iteração do loop do jogo.
-     * @author Laura Cardoso
+     * @author Laura Castro
      * @todo alterar o controle dos paddles para ser controlado individualmente.
      * @todo adicionar o reset da bola e o sistema de pontuação
      * 
