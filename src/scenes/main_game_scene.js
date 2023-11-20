@@ -72,6 +72,7 @@ class main_game_scene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
     /**
+     * 
      * @description essa função é chamada a cada iteração do loop do jogo.
      * @author Laura Castro
      * @todo alterar o controle dos paddles para ser controlado individualmente.
@@ -117,9 +118,53 @@ class main_game_scene extends Phaser.Scene {
         } else if (this.cursors.down.isDown && paddleRight.y < this.sys.game.config.height) {
             paddleRight.y += speed;
         }
+        
 
     }
 
+    /**
+     * 
+     * @description Essa função retorna um objeto contendo os valores de x da sprite dos paddles
+     * @param {sprite} paddleR Objeto do tipo sprite que fica no lado direito da tela
+     * @param {sprite} paddleL Objeto do tipo sprite que fica no lado esquerda da tela
+     * @returns Retorna um objeto com os valores de x das sprites da paddles
+     * 
+     */
+
+    make_paddles_x_object(paddleR,paddleL){
+        return {paddleR:paddleR.x,paddleL:paddleL.x}
+    }
+
+    /**
+     * 
+     * @description Essa função retorna um boolean caso a bola esteja fora dos alcançe dos paddles
+     * @param {object} paddles_x objeto contendo os valores de x dos paddles
+     * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
+     * @returns retorna um boolean, sendo true caso a bola esteja fora do alcançe e false caso esteja dentro do alcançe 
+     * 
+     */
+    ball_out_of_bound(paddles_x,ball){
+        if(ball.x > paddles_x['paddleR'] || ball.x < paddles_x['paddleL']){
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 
+     * @description essa função reseta a bola para a posição central do jogo 
+     * @param {object} paddles_x objeto contendo as coordenadas dos paddles do jogo
+     * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
+     * @returns a funçap retorna caso a bola esteja dento do alcançe dos paddles
+     * 
+     */
+    reset_ball(paddles_x,ball){
+        if(!this.ball_out_of_bound(paddles_x,ball)){
+            return;
+        }
+        ball.x = 510;
+        ball.y = 390;
+
+    }
     /**
      * @description Essa função define um callback para classe game_config
      * @author Gustavo  Henrique Miranda
