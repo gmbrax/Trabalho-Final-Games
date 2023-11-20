@@ -103,6 +103,49 @@ class game_config {
         this.context.set_player2_score(value);
     }
 
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro que é relativo ao valor do x do paddle da direita
+     * @param {int} value Inteiro da posição do x do paddle da direita
+     * 
+     */
+    set_right_paddle_x(x){
+        this.context.set_right_paddle_x(x);
+    }
+
+     /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado o valor do x do paddle da direita
+     * @returns Returna um inteiro com o valor do x do paddle da direita.
+     * 
+     */
+    get_right_paddle_x(){
+        return this.context.get_right_paddle_x();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro que é relativo ao valor do x do paddle da esquerda
+     * @param {int} value Inteiro da posição do x do paddle da esquerda
+     * 
+     */
+    set_left_paddle_x(x){
+        this.context.set_left_paddle_x(x);
+    }
+
+     /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado o valor do x do paddle da esquerda
+     * @returns Returna um inteiro com o valor do x do paddle da esquerda.
+     * 
+     */
+    get_left_paddle_x(){
+        return this.context.get_left_paddle_x();
+    }
 }
 
 export default game_config;
