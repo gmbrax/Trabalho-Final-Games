@@ -66,7 +66,7 @@ class main_game_scene extends Phaser.Scene {
         let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
         this.p1_score_board = this.add.group(group_default);
         this.p1_score_board.setName('p1_score_board');
-        console.log(this.p1_score_board);
+        
         group_default['setXY']['x'] = 690;
         this.p2_score_board = this.add.group(group_default);
         this.p2_score_board.setName('p2_score_board');
@@ -123,7 +123,7 @@ class main_game_scene extends Phaser.Scene {
             paddleRight.y += speed;
         }
         this.check_for_score(ball);
-        console.log(this.children.getChildren())
+        
         this.update_both_score_boards(this.p1_score_board,this.get_cache_p1_score_board(),this.p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score())
     }
 
@@ -201,7 +201,7 @@ class main_game_scene extends Phaser.Scene {
      * @returns retorna um boolean, sendo true caso o player tenha feito ponto e false caso o computador tenha feito ponto
      */
     player_scored(paddles_x,ball){
-        console.log("Bola:",ball.x,"\n","Paddles: ",paddles_x)
+        
         if (ball.x > paddles_x['paddleR']){
             return true;
         }

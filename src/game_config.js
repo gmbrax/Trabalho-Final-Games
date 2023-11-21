@@ -47,7 +47,7 @@ class game_config {
      * @returns Retorna um objeto contendo os atributos da classe necessárias para o Phaser.js
      */
     make_config_object() {
-        console.log(this.physics.make_physics_object());
+        
         return {
             type: this.type,
             width: this.width,
