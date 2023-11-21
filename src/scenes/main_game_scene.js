@@ -22,6 +22,8 @@ class main_game_scene extends Phaser.Scene {
         this.parent_class = null;
         this.p1_score_board_cached = []
         this.p2_score_board_cached = []
+        this.p1_score_board;
+        this.p2_score_board;
     }
 
     hitCount = 0;
@@ -60,25 +62,30 @@ class main_game_scene extends Phaser.Scene {
 
         paddleLeft.setName('paddleL');
         paddleRight.setName('paddleR');
-
+        this.parent_class.set_right_paddle_x(paddleRight.x);
+        this.parent_class.set_left_paddle_x(paddleLeft.x);
         this.physics.add.existing(paddleLeft, true);
         this.physics.add.existing(paddleRight, true);
+
+        // OTHERS
+        this.add.sprite(510, 390, 'divider_black');
+        let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
+        this.p1_score_board = this.add.group(group_default);
+        this.p1_score_board.setName('p1_score_board');
+        
+
 
         const frameHeight = this.sys.game.config.height;
 
         paddleLeft.y = this.randomNumber(0, frameHeight - this.paddleLeftHeight);
         paddleLeft.speed = this.randomNumber(1, 5);
 
-        // OTHERS
-        this.add.sprite(510, 390, 'divider_black');
-        let group_default = { key: 'Number_Font_White', frame: 9, repeat: 2, setXY: { x: 174, y: 160, stepX: 60 } };
-        let p1_score_board = this.add.group(group_default);
-        p1_score_board.setName('p1_score_board');
+      
         group_default['setXY']['x'] = 690;
-        let p2_score_board = this.add.group(group_default);
-        p2_score_board.setName('p2_score_board')
-        this.set_cache_p1_score_board(p1_score_board);
-        this.set_cache_p2_score_board(p2_score_board);
+        this.p2_score_board = this.add.group(group_default);
+        this.p2_score_board.setName('p2_score_board');
+        this.set_cache_p1_score_board(this.p1_score_board);
+        this.set_cache_p2_score_board(this.p2_score_board);
 
         this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -120,7 +127,6 @@ class main_game_scene extends Phaser.Scene {
         //PADDLES
         const paddleLeft = this.children.getByName('paddleL');
         const paddleRight = this.children.getByName('paddleR');
-
         const speed = 5;
         //left
 
@@ -155,21 +161,44 @@ class main_game_scene extends Phaser.Scene {
         } else if (this.cursors.down.isDown && paddleRight.y < this.sys.game.config.height) {
             paddleRight.y += speed;
         }
-        let p1_score_board = this.children.getByName('p1_score_board');
-        let p2_score_board = this.children.getByName('p2_score_board');
-
+        this.check_for_score(ball);
+        
+        this.update_both_score_boards(this.p1_score_board,this.get_cache_p1_score_board(),this.p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score())
     }
+
     /**
      * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função checa se houve pontuação 
+     * @param {sprite} ball objeto do tipo sprite contendo a bola do jogo
+     * @returns a função retorna quando executa
+     */
+    check_for_score(ball){
+        const paddles_x =  this.make_paddles_x_object();
+        if(!this.ball_out_of_bound(paddles_x,ball)){
+            return;
+        }
+        if(this.player_scored(paddles_x,ball)){
+            this.parent_class.set_player1_score(this.parent_class.get_player1_score() + 1);
+            this.reset_ball(ball);
+            return;
+        }
+        this.parent_class.set_player2_score(this.parent_class.get_player2_score()+1);
+        this.reset_ball(ball);
+
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
      * @description Essa função retorna um objeto contendo os valores de x da sprite dos paddles
-     * @param {sprite} paddleR Objeto do tipo sprite que fica no lado direito da tela
-     * @param {sprite} paddleL Objeto do tipo sprite que fica no lado esquerda da tela
      * @returns Retorna um objeto com os valores de x das sprites da paddles
      * 
      */
-
-    make_paddles_x_object(paddleR,paddleL){
-        return {paddleR:paddleR.x,paddleL:paddleL.x}
+    make_paddles_x_object(){
+        const left_x = this.parent_class.get_left_paddle_x();
+        const right_x = this.parent_class.get_right_paddle_x();
+        return {paddleR:right_x,paddleL:left_x};
     }
 
     /**
@@ -188,24 +217,44 @@ class main_game_scene extends Phaser.Scene {
     }
     /**
      * 
+     * @author Gustavo Henrique Miranda
      * @description essa função reseta a bola para a posição central do jogo 
      * @param {object} paddles_x objeto contendo as coordenadas dos paddles do jogo
      * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
-     * @returns a funçap retorna caso a bola esteja dento do alcançe dos paddles
      * 
      */
-    reset_ball(paddles_x,ball){
-        if(!this.ball_out_of_bound(paddles_x,ball)){
-            return;
-        }
+    reset_ball(ball){
         ball.x = 510;
         ball.y = 390;
+        ball.speedX *= -1;
+        ball.speedY *= -1;
 
 
     }
 
     /**
-     * @description Essa funcao define um callback para classe game_config
+
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função checa se o player fez ponto ou se o computador fez ponto
+     * @param {object} paddles_x Objeto contendo os valores do x dos paddles
+     * @param {sprite} ball objeto da classe sprite, contendo a bola do jog
+     * @returns retorna um boolean, sendo true caso o player tenha feito ponto e false caso o computador tenha feito ponto
+     */
+    player_scored(paddles_x,ball){
+        
+        if (ball.x > paddles_x['paddleR']){
+            return true;
+        }
+        else if (ball.x < paddles_x['paddleL']) {
+            return false;
+        }
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função define um callback para classe game_config
      * @author Gustavo  Henrique Miranda
      * @param {game_config} callback_class referencia da classe game_config
      */
@@ -215,7 +264,7 @@ class main_game_scene extends Phaser.Scene {
 
     /**
      * 
-     * @description Essa funcao guarda uma copia dos valores do scoreboard do player1
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
      * @author Gustavo Henrique Miranda
      * @param {group} p1_score_board grupo de sprites do scoreboard do player1
      * 
@@ -228,8 +277,8 @@ class main_game_scene extends Phaser.Scene {
 
     /**
      * 
-     * @description Essa funcao guarda uma copia dos valores do scoreboard do player1
      * @author Gustavo Henrique Miranda
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
      * @param {group} p2_score_board grupo de sprites do scoreboard do player2
      */
     set_cache_p2_score_board(p2_score_board) {

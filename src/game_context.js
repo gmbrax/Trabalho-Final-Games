@@ -22,6 +22,46 @@ class game_context {
     constructor() {
         this.player1_score = 0;
         this.player2_score = 0;
+        this.right_paddle_x;
+        this.left_paddle_x;
+    }
+
+    /**
+     * @description Essa função recebe um valor inteiro que é o valor da posição x do paddle da direita
+     * @param {int} x valor da posição do x do paddle da direita 
+     */
+    set_right_paddle_x(x){
+        this.right_paddle_x = x;
+    }
+
+    /**
+     * 
+     * @description Essa função retorna um inteiro que é o valor do x do paddle da direita
+     * @returns Retorna um inteiro que é o valor do x do paddle da direita
+     * 
+     */
+    get_right_paddle_x(){
+        return this.right_paddle_x;
+    }
+
+    /**
+     * 
+     * @description Essa função recebe um valor inteiro que é o valor da posição x do paddle da esquerda
+     * @param {int} x valor da posição do x do paddle da esquerda 
+     * 
+     */
+    set_left_paddle_x(x){
+        this.left_paddle_x = x;
+    }
+    
+    /**
+     * 
+     * @description Essa função retorna um inteiro que é o valor do x do paddle da esquerda
+     * @returns Retorna um inteiro que é o valor do x do paddle da esquerda
+     * 
+     */
+    get_left_paddle_x(){
+        return this.left_paddle_x;
     }
 
     /**
