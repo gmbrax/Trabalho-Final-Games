@@ -2,6 +2,9 @@
  * @file Arquivo  contendo a cena principal do jogo 
  * @version 0.0.1
  * @author Gustavo Henrique S. S. de Miranda
+ * @todo Corrigir bug no scoreboard em que o numero 1 fica demasiadamente longe dos outros numeros
+*/
+
 /**
  * 
  * @class 
@@ -16,6 +19,9 @@ class main_game_scene extends Phaser.Scene {
     */
     constructor() {
         super({ key: 'main' });
+        this.parent_class = null;
+        this.p1_score_board_cached = []
+        this.p2_score_board_cached = []
 
     }
 
@@ -34,6 +40,7 @@ class main_game_scene extends Phaser.Scene {
 
     /**
     * @description Essa função cria os recursos usados na cena
+    * @author Gustavo Henrique Miranda, Laura Cardoso
     */
     create() {
         //BALL
@@ -54,16 +61,26 @@ class main_game_scene extends Phaser.Scene {
 
         // OTHERS
         this.add.sprite(510, 390, 'divider_black');
-        this.add.sprite(174, 160, 'Number_Font_White', 9);
-        this.add.sprite(234, 160, 'Number_Font_White', 9);
-        this.add.sprite(294, 160, 'Number_Font_White', 9);
-        this.add.sprite(690, 160, 'Number_Font_White', 9);
-        this.add.sprite(750, 160, 'Number_Font_White', 9);
-        this.add.sprite(810, 160, 'Number_Font_White', 9);
+        let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
+        let p1_score_board = this.add.group(group_default);
+        p1_score_board.setName('p1_score_board');
+        group_default['setXY']['x'] = 690;
+        let p2_score_board = this.add.group(group_default);
+        p2_score_board.setName('p2_score_board')
+        this.set_cache_p1_score_board(p1_score_board);
+        this.set_cache_p2_score_board(p2_score_board);
+
 
         this.cursors = this.input.keyboard.createCursorKeys();
     }
-
+    /**
+     * 
+     * @description essa função é chamada a cada iteração do loop do jogo.
+     * @author Laura Castro
+     * @todo alterar o controle dos paddles para ser controlado individualmente.
+     * @todo adicionar o reset da bola e o sistema de pontuação
+     * 
+     */
 
     update() {
         //BALL
@@ -103,6 +120,237 @@ class main_game_scene extends Phaser.Scene {
         } else if (this.cursors.down.isDown && paddleRight.y < this.sys.game.config.height) {
             paddleRight.y += speed;
         }
+        let p1_score_board = this.children.getByName('p1_score_board');
+        let p2_score_board = this.children.getByName('p2_score_board');
 
+    }
+    /**
+     * 
+     * @description Essa função retorna um objeto contendo os valores de x da sprite dos paddles
+     * @param {sprite} paddleR Objeto do tipo sprite que fica no lado direito da tela
+     * @param {sprite} paddleL Objeto do tipo sprite que fica no lado esquerda da tela
+     * @returns Retorna um objeto com os valores de x das sprites da paddles
+     * 
+     */
+
+    make_paddles_x_object(paddleR,paddleL){
+        return {paddleR:paddleR.x,paddleL:paddleL.x}
+    }
+
+    /**
+     * 
+     * @description Essa função retorna um boolean caso a bola esteja fora dos alcançe dos paddles
+     * @param {object} paddles_x objeto contendo os valores de x dos paddles
+     * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
+     * @returns retorna um boolean, sendo true caso a bola esteja fora do alcançe e false caso esteja dentro do alcançe 
+     * 
+     */
+    ball_out_of_bound(paddles_x,ball){
+        if(ball.x > paddles_x['paddleR'] || ball.x < paddles_x['paddleL']){
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 
+     * @description essa função reseta a bola para a posição central do jogo 
+     * @param {object} paddles_x objeto contendo as coordenadas dos paddles do jogo
+     * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
+     * @returns a funçap retorna caso a bola esteja dento do alcançe dos paddles
+     * 
+     */
+    reset_ball(paddles_x,ball){
+        if(!this.ball_out_of_bound(paddles_x,ball)){
+            return;
+        }
+        ball.x = 510;
+        ball.y = 390;
+
+    }
+
+    /**
+     * @description Essa função define um callback para classe game_config
+     * @author Gustavo  Henrique Miranda
+     * @param {game_config} callback_class referencia da classe game_config
+     */
+    set_parent_class_callback(callback_class){
+        this.parent_class = callback_class;
+    }
+
+    /**
+     * 
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
+     * @author Gustavo Henrique Miranda
+     * @param {group} p1_score_board grupo de sprites do scoreboard do player1
+     * 
+     */
+    set_cache_p1_score_board(p1_score_board){
+        p1_score_board.children.iterate(function (child, index) {
+            this.p1_score_board_cached.push(child.frame.name);
+        }, this);
+    }
+
+    /**
+     * 
+     * @description Essa função guarda uma cópia dos valores do scoreboard do player1
+     * @author Gustavo Henrique Miranda
+     * @param {group} p2_score_board grupo de sprites do scoreboard do player2
+     */
+    set_cache_p2_score_board(p2_score_board){
+        p2_score_board.children.iterate(function (child, index) {
+            this.p2_score_board_cached.push(child.frame.name);
+        }, this);
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna um array com os valores do frame do score board do player1
+     * @returns retorna o array contendo os valores dos frames do score board do player1
+     */
+    get_cache_p1_score_board(){
+        return this.p1_score_board_cached;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna um array com os valores do frame do score board do player2
+     * @returns retorna o array contendo os valores dos frames do score board do player2
+     */
+    get_cache_p2_score_board(){
+        return this.p2_score_board_cached;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função atualiza o scoreboard do player1 
+     * @param {group} p1_score_board grupo de sprites do score board do 
+     * @param {Array} update_array Array contendo os valores do frames equivalentes ao numero a ser atualizado
+     * 
+     */
+    update_p1_score_board(p1_score_board,update_array){
+        p1_score_board.children.iterate(function(child,index){
+            child.setFrame(update_array[index]);
+        })
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função atualiza o scoreboard do player2 
+     * @param {group} p2_score_board grupo de sprites do score board do 
+     * @param {Array} update_array Array contendo os valores do frames equivalentes ao numero a ser atualizado
+     * 
+     */
+    update_p2_score_board(p2_score_board,update_array){
+        p2_score_board.children.iterate(function(child,index){
+            child.setFrame(update_array[index]);
+        })
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função converte um array de digitos em um array de numeros de frame.
+     * @param {Array} digit_array Array contendo os digitos à serem convertidos.
+     * @returns retorna um array com os valores de digito convertido para o seus repectivos valores de frame. 
+     * 
+     */
+    convert_to_frame_number(digit_array){
+        const lut = {0:9,1:0,2:1,3:2,4:3,5:4,6:5,7:6,8:7,9:8};
+        let result =[];
+        for (let digit of digit_array){
+            result.push(lut[digit])
+        }
+        return result;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Função que converte um numero em um array contendo esses numeros
+     * @param {Integer} number valor à ser convertido para um array
+     * @returns retorna um array com os numeros
+     * 
+     */
+    convert_integer_to_array(number){
+        let result = []
+        if (number <= 999){
+
+        result.push(Math.floor(number / 100));
+        result.push(Math.floor(number / 10) % 10);
+        result.push(Math.floor(number % 10 ));
+        return result;
+        }
+        else return null;
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna o score atual do player1
+     * @returns retorna um inteiro com o score atual do player1
+     */
+    get_p1_current_score(){
+
+        return this.parent_class.get_player1_score();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função retorna o score atual do player2
+     * @returns  retorna um inteiro com o score atual do player2
+     */
+    get_p2_current_score(){
+        return this.parent_class.get_player2_score();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa Função recebe um inteiro para o current score e um array contendo os valores do frame de um scoreboard,
+     * converte o current score para um array de com valores de frame correspondentes e compara os dois arrays e retorna o boolean dessa 
+     * comparação
+     * @param {int} current_score Inteiro correspondendo ao score atual
+     * @param {Array} scoreboard  Array contendo os numeros do frame que estão sendo exibidos
+     * @returns Essa função retorna um boolean true caso os valores seja iguais e retorna false caso contrário, e null caso haja diferença de tamanho entre os arrays 
+     * 
+     */
+    compare_current_score_to_scoreboard(current_score,scoreboard){
+        let current_score_array = this.convert_to_frame_number(this.convert_integer_to_array(current_score));
+        if (!current_score_array.length === scoreboard.length){
+            return null;
+        }
+        let equal_items = scoreboard.every((element,index)=> element === current_score_array[index]); 
+        return (equal_items)
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Miranda
+     * @description Essa função checa se o valor armazenado em cache dos arrays de frame os scoreboards estão iguais as pontuações do player1 e player2,
+     *  e caso não atualiza os scoresboard e armazena o valor no cache correspondente ao score board
+     * @param {group} p1_score_board referencia do scoreboard do player1
+     * @param {Array} p1_chached_score_board Valor em cache do array dos frames do scoreboard do player1
+     * @param {group} p2_score_board Referencia do scoreboard do player2
+     * @param {Array} p2_cached_score_board Valor em cache do array de frames do scoreboard do player2
+     * @param {int} p1_current_score Pontuação atual do player1
+     * @param {int} p2_current_score Pontuação atual do player2
+     * 
+     */
+    update_both_score_boards(p1_score_board,p1_chached_score_board,p2_score_board,p2_cached_score_board,p1_current_score,p2_current_score){
+        if(!this.compare_current_score_to_scoreboard(p1_current_score,p1_chached_score_board)){
+            let p1_current_score_frames = this.convert_to_frame_number(this.convert_integer_to_array(p1_current_score));
+            this.update_p1_score_board(p1_score_board,p1_current_score_frames);
+            this.set_cache_p1_score_board(p1_score_board);
+        }
+        if(!this.compare_current_score_to_scoreboard(p2_current_score,p2_cached_score_board)){
+            let p2_current_score_frames = this.convert_to_frame_number(this.convert_integer_to_array(p2_current_score));
+            this.update_p2_score_board(p2_score_board,p2_current_score_frames);
+            this.set_cache_p2_score_board(p2_score_board);
+        }
     }
 }
