@@ -167,6 +167,7 @@ class main_game_scene extends Phaser.Scene {
         ball.y = 390;
 
     }
+
     /**
      * @description Essa função define um callback para classe game_config
      * @author Gustavo  Henrique Miranda
