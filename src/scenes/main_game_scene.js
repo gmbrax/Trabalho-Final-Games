@@ -188,7 +188,7 @@ class main_game_scene extends Phaser.Scene {
         let player_score = this.get_p2_current_score();
         let pc_score = this.get_p1_current_score();
 
-        if (player_score >= (5 + increase_goal)) { //se o jogador fez 5 (10,15,20...) pontos
+        if (player_score >= (5 + this.increase_goal)) { //se o jogador fez 5 (10,15,20...) pontos
             if (player_score > pc_score) {  //E se esta com mais pontos que o pc
                 this.scene.pause();
                 this.win_audio.play();
