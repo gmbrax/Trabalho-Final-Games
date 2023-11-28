@@ -31,7 +31,8 @@ class main_game_scene extends Phaser.Scene {
     cursors;
     directionPleft = 1; // 1 representa movimento de baixo para cima, -1 representa movimento de cima para baixo
     paddleLeftHeight = 100;
-
+    hit_audio;
+    win_audio;
 
     /**
      * @description Essa funcao carrega para a memoria os recursos da cena.
@@ -40,8 +41,10 @@ class main_game_scene extends Phaser.Scene {
         this.load.image('paddle_white', 'assets/images/Paddle_White.png');
         this.load.image('divider_black', 'assets/images/Divider_Black.png');
         this.load.image('ball_white', 'assets/images/Ball_White.png');
-        this.load.spritesheet("Number_Font_White", "assets/images/Number_Font_White.png", { frameWidth: 40, frameHeight: 80, spacing: 21 });
+        this.load.spritesheet('Number_Font_White', 'assets/images/Number_Font_White.png', { frameWidth: 40, frameHeight: 80, spacing: 21 });
 
+        this.load.audio('ball_hit_audio', ['assets/audio/beep.mp3']);
+        this.load.audio('victory_audio', ['assets/audio/victory.mp3']);
     }
 
 
@@ -50,13 +53,17 @@ class main_game_scene extends Phaser.Scene {
     * @author Gustavo Henrique Miranda, Laura Castro
     */
     create() {
-        //BALL
+        this.hit_audio = this.sound.add('ball_hit_audio');
+        this.win_audio = this.sound.add('victory_audio');
+
+        //#region BALL
         const ball = this.add.sprite(390, 390, 'ball_white');
         ball.speedX = 3;
         ball.speedY = 3;
         ball.setName('ball');
+        //#endregion
 
-        // PADDLES
+        //#region PADDLES
         const paddleLeft = this.add.sprite(45, 390, 'paddle_white').setOrigin(0.5, 0.5);
         const paddleRight = this.add.sprite(975, 390, 'paddle_white').setOrigin(0.5, 0.5);
 
@@ -66,21 +73,19 @@ class main_game_scene extends Phaser.Scene {
         this.parent_class.set_left_paddle_x(paddleLeft.x);
         this.physics.add.existing(paddleLeft, true);
         this.physics.add.existing(paddleRight, true);
-
-        // OTHERS
-        this.add.sprite(510, 390, 'divider_black');
-        let group_default = {key:'Number_Font_White',frame:9,repeat:2,setXY:{x:174,y:160,stepX:60}};
-        this.p1_score_board = this.add.group(group_default);
-        this.p1_score_board.setName('p1_score_board');
-        
-
-
         const frameHeight = this.sys.game.config.height;
 
         paddleLeft.y = this.randomNumber(0, frameHeight - this.paddleLeftHeight);
         paddleLeft.speed = this.randomNumber(1, 5);
+        //#endregion
 
-      
+        //#region OTHERS
+        this.add.sprite(510, 390, 'divider_black');
+        let group_default = { key: 'Number_Font_White', frame: 9, repeat: 2, setXY: { x: 174, y: 160, stepX: 60 } };
+        this.p1_score_board = this.add.group(group_default);
+        this.p1_score_board.setName('p1_score_board');
+
+
         group_default['setXY']['x'] = 690;
         this.p2_score_board = this.add.group(group_default);
         this.p2_score_board.setName('p2_score_board');
@@ -88,25 +93,40 @@ class main_game_scene extends Phaser.Scene {
         this.set_cache_p2_score_board(this.p2_score_board);
 
         this.cursors = this.input.keyboard.createCursorKeys();
+        //#endregion
+    }
+
+    /**
+     * @description Emite o som da bola quando atinge um dos paddles
+     */
+    make_sound_when_hit() {
+        if (!this.hit_audio.isPlaying) {
+            this.hit_audio.play();
+        }
     }
 
     firstHit = false; //variavel basicamente indica se ira ou nao bater com a bolinha
     shouldWin = this.randomNumber(0, 10);
+    increase_goal = 0; //define o objetivo final do jogo, de 5 em 5
 
-
+    /**
+     * @description Gera um numero aleatorio entre o minimo e o maximo definido
+     * @param {number} min 
+     * @param {number} max 
+     * @returns um numero aleatorio
+     */
     randomNumber(min, max) {
         // Math.random() gera um número entre 0 (inclusive) e 1 (exclusivo)
         // Multiplicamos pela amplitude do intervalo e arredondamos para baixo usando Math.floor()
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-
+    
     /**
      * @description essa funcao e chamada a cada iteracao do loop do jogo.
      * @author Laura Castro
-     * @todo adicionar o reset da bola e o sistema de pontuacao
      */
     update() {
-        //BALL
+        //#region BALL
         const ball = this.children.getByName('ball');
 
         ball.x += ball.speedX;
@@ -119,17 +139,19 @@ class main_game_scene extends Phaser.Scene {
         const paddles = this.children.getChildren().filter(child => child.name === 'paddleL' || child.name === 'paddleR');
         paddles.forEach(paddle => {
             if (Phaser.Geom.Intersects.RectangleToRectangle(ball.getBounds(), paddle.getBounds())) {
+                this.make_sound_when_hit();
                 ball.speedX *= -1;
             }
         });
+        //#endregion
 
 
-        //PADDLES
+        //#region PADDLES
         const paddleLeft = this.children.getByName('paddleL');
         const paddleRight = this.children.getByName('paddleR');
         const speed = 5;
-        //left
 
+        //left
         if (ball.x < 61) {
             this.firstHit = true;
         }
@@ -147,7 +169,7 @@ class main_game_scene extends Phaser.Scene {
                 // Define uma nova velocidade aleatoria
                 paddleLeft.speed = this.randomNumber(1, 5);
             }
-            if (this.shouldWin < 8) { //quanto mais perto de 10 o numero, mais "vezes" o paddleLeft vai estar no mesmo Y da bola
+            if (this.shouldWin < 8) { //quanto mais perto de 10 o numero, mais 'vezes' o paddleLeft vai estar no mesmo Y da bola
                 this.firstHit = false;
                 this.shouldWin = this.randomNumber(0, 10); //faz com que, randomicamente, a barra volte a ter a posicao da bolinha
             }
@@ -161,9 +183,22 @@ class main_game_scene extends Phaser.Scene {
         } else if (this.cursors.down.isDown && paddleRight.y < this.sys.game.config.height) {
             paddleRight.y += speed;
         }
+        //#endregion
+
+        let player_score = this.get_p2_current_score();
+        let pc_score = this.get_p1_current_score();
+
+        if (player_score >= (5 + this.increase_goal)) { //se o jogador fez 5 (10,15,20...) pontos
+            if (player_score > pc_score) {  //E se esta com mais pontos que o pc
+                this.scene.pause();
+                this.win_audio.play();
+            }
+            this.increase_goal += 5;
+        }
+
         this.check_for_score(ball);
-        
-        this.update_both_score_boards(this.p1_score_board,this.get_cache_p1_score_board(),this.p2_score_board,this.get_cache_p2_score_board(),this.get_p1_current_score(),this.get_p2_current_score())
+        this.update_both_score_boards(this.p1_score_board, this.get_cache_p1_score_board(), this.p2_score_board, this.get_cache_p2_score_board(), pc_score, player_score)
+
     }
 
     /**
@@ -173,17 +208,17 @@ class main_game_scene extends Phaser.Scene {
      * @param {sprite} ball objeto do tipo sprite contendo a bola do jogo
      * @returns a função retorna quando executa
      */
-    check_for_score(ball){
-        const paddles_x =  this.make_paddles_x_object();
-        if(!this.ball_out_of_bound(paddles_x,ball)){
+    check_for_score(ball) {
+        const paddles_x = this.make_paddles_x_object();
+        if (!this.ball_out_of_bound(paddles_x, ball)) {
             return;
         }
-        if(this.player_scored(paddles_x,ball)){
+        if (this.player_scored(paddles_x, ball)) {
             this.parent_class.set_player1_score(this.parent_class.get_player1_score() + 1);
             this.reset_ball(ball);
             return;
         }
-        this.parent_class.set_player2_score(this.parent_class.get_player2_score()+1);
+        this.parent_class.set_player2_score(this.parent_class.get_player2_score() + 1);
         this.reset_ball(ball);
 
     }
@@ -195,10 +230,10 @@ class main_game_scene extends Phaser.Scene {
      * @returns Retorna um objeto com os valores de x das sprites da paddles
      * 
      */
-    make_paddles_x_object(){
+    make_paddles_x_object() {
         const left_x = this.parent_class.get_left_paddle_x();
         const right_x = this.parent_class.get_right_paddle_x();
-        return {paddleR:right_x,paddleL:left_x};
+        return { paddleR: right_x, paddleL: left_x };
     }
 
     /**
@@ -209,12 +244,13 @@ class main_game_scene extends Phaser.Scene {
      * @returns retorna um boolean, sendo true caso a bola esteja fora do alcançe e false caso esteja dentro do alcançe 
      * 
      */
-    ball_out_of_bound(paddles_x,ball){
-        if(ball.x > paddles_x['paddleR'] || ball.x < paddles_x['paddleL']){
+    ball_out_of_bound(paddles_x, ball) {
+        if (ball.x > paddles_x['paddleR'] || ball.x < paddles_x['paddleL']) {
             return true;
         }
         return false;
     }
+    
     /**
      * 
      * @author Gustavo Henrique Miranda
@@ -223,7 +259,7 @@ class main_game_scene extends Phaser.Scene {
      * @param {sprite} ball objeto da classe sprite, contendo a bola do jogo
      * 
      */
-    reset_ball(ball){
+    reset_ball(ball) {
         ball.x = 510;
         ball.y = 390;
         ball.speedX *= -1;
@@ -241,9 +277,9 @@ class main_game_scene extends Phaser.Scene {
      * @param {sprite} ball objeto da classe sprite, contendo a bola do jog
      * @returns retorna um boolean, sendo true caso o player tenha feito ponto e false caso o computador tenha feito ponto
      */
-    player_scored(paddles_x,ball){
-        
-        if (ball.x > paddles_x['paddleR']){
+    player_scored(paddles_x, ball) {
+
+        if (ball.x > paddles_x['paddleR']) {
             return true;
         }
         else if (ball.x < paddles_x['paddleL']) {
