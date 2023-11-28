@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game_config.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game_config.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import game_physics from "./game_physics.js";
+import game_scaler from "./game_scaler.js";
+import game_context from "./game_context.js";
+
+/**
+ * @file Arquivo Contendo a classe de configuração do jogo.
+ * @version 0.0.1
+ * @author Gustavo Henrique S. S. de Miranda,
+ */ 
+
+/**
+ * @author Gustavo Henrique S. S. Miranda
+ * @class 
+ * @classdesc Essa classe inicializa as configurações básicas necessárias para poder iniciar o funcionamento do 
+ * Phaser.js  
+ */
+
+class game_config {
+    /**
+     * @constructs
+     * Esse construtor recebe a dimensões da tela a ser criada pelo Phaser.JS.
+     * @param {int} width  - Largura da tela do jogo 
+     * @param {int} height Altura da tela do jogo
+     */
+    constructor(width, height) {
+        this.type = Phaser.AUTO
+        this.width = width;
+        this.height = height;
+        this.game = null;
+        this.scene = [new main_game_scene()] // Isso aqui é quase um crime mas pelo menos funciona talvez isso aqui deveria ser uma função
+        this.physics = new game_physics();
+        this.scale = new game_scaler();
+        this.context = new game_context();
+
+    }
+    /**
+     * 
+     * @description Essa função inicializa a biblioteca Phaser.js apartir dos atributos da classe.
+     * @todo adicionar um for loop para caso que tenha mais de uma cena
+     */
+    initialize() {
+        this.game = new Phaser.Game(this.make_config_object());
+        this.scene[0].set_parent_class_callback(this)
+    }
+    /**
+     * @description Essa Função cria apartir dos atributos da classe um objeto para ser passado para o inicializador do Phaser.js
+     * @returns Retorna um objeto contendo os atributos da classe necessárias para o Phaser.js
+     */
+    make_config_object() {
+        
+        return {
+            type: this.type,
+            width: this.width,
+            height: this.height,
+            scene: this.scene,
+            physics: this.physics.make_physics_object(),
+            scale: this.scale.make_scale_object()
+
+        }
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado a pontução do player1.
+     * @returns Returna um inteiro com o valor da pontuação do player1.
+     * 
+     */
+    get_player1_score() {
+        return this.context.get_player1_score()
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado a pontução do player2.
+     * @returns Returna um inteiro com o valor da pontuação do player2.
+     * 
+     */
+    get_player2_score() {
+        return this.context.get_player2_score();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro e o define como a pontuação atual do player1.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player1;
+     * 
+     */
+    set_player1_score(value) {
+        this.context.set_player1_score(value);
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro e o define como a pontuação atual do player2.
+     * @param {int} value Inteiro a ser usado como o novo valor para a pontuação do player2;
+     * 
+     */
+    set_player2_score(value) {
+        this.context.set_player2_score(value);
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro que é relativo ao valor do x do paddle da direita
+     * @param {int} value Inteiro da posição do x do paddle da direita
+     * 
+     */
+    set_right_paddle_x(x){
+        this.context.set_right_paddle_x(x);
+    }
+
+     /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado o valor do x do paddle da direita
+     * @returns Returna um inteiro com o valor do x do paddle da direita.
+     * 
+     */
+    get_right_paddle_x(){
+        return this.context.get_right_paddle_x();
+    }
+
+    /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo do game_context, aonde se recebe um valor inteiro que é relativo ao valor do x do paddle da esquerda
+     * @param {int} value Inteiro da posição do x do paddle da esquerda
+     * 
+     */
+    set_left_paddle_x(x){
+        this.context.set_left_paddle_x(x);
+    }
+
+     /**
+     * 
+     * @author Gustavo Henrique Santos Souza de Miranda
+     * @description Essa função encapsula a função de mesmo nome do game_context, onde é retornado o valor do x do paddle da esquerda
+     * @returns Returna um inteiro com o valor do x do paddle da esquerda.
+     * 
+     */
+    get_left_paddle_x(){
+        return this.context.get_left_paddle_x();
+    }
+}
+
+export default game_config;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="game_config.html">game_config</a></li><li><a href="game_context.html">game_context</a></li><li><a href="game_physics.html">game_physics</a></li><li><a href="game_scaler.html">game_scaler</a></li><li><a href="main_game_scene.html">main_game_scene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Nov 28 2023 00:09:24 GMT-0300 (Horário Padrão de Brasília)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

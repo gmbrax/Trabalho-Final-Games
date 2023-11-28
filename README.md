@@ -1,46 +1,57 @@
-# Trabalho Final de Desenvolvimento de Jogos
+# Trabalho Final de Desenvolvimento de Games
+
+Trabalho Desenvolvido para entrega final da materia de Desenvolvimento de Games.
+
 ## Sobre
-Projeto Final para a matéria de Desenvolvimento de Games da Faculdade UniAcademia
-## Requerimentos
-O único requerimento é para a geração da documentação que é necessário ter a ferramenta JSDoc.
-### Phaser.js
-A biblioteca necessária do phaser.js está na pasta lib, e está disponivel em duas versões, a normal e a minificado.
-para desenvolvimento é melhor utilizar a versão não minificada e so mudar para a minificada quando for feito a versão de entrega.
 
+Foi escolhido para esse projeto o a biblioteca Phaser.js
 
-## Documentação
-É requerido que os codigos sejam documentados usando comentários no estilo JSDocs para a geração de documentação do codigo feito.
-Os comentários seguem o seguinte padrão:
-```javascript
-/**
- * 
- * @author Nome do Candango que fez o código
- * @class
- * @classdesc Descrição da Classe
- * 
- */
-class classe{
-    /**
-     * 
-     * @constructs
-     * Descrição do construtor da classe
-     * @param {type} nome_parametro - Descreva aqui aqui o que o parametro é
-     * 
-     */
-    constructor(nome_parametro){
-        this.atributo = nome_parametro; 
-    }
-    /**
-     * @description Descreva o que o metodo faz
-     * @returns Descreva o que a função retorna (omita essa opção caso não retorne)
-     * @todo Adicione uma tarefa caso seja necessário que algo seja concertado ou modiificado
-     */
-    method_name(){}
+Para rodar o jogo localmente - necessário um server próprio.  
+Sugestão - usar o *http-server*:
 
-}
+1. Instalar:  
+    ```npm install -g http-server```
+2. Executar o servidor:  
+    ```http-server -c-1```
 
-```
-Para todos os comando disponiveis por favor visite: https://jsdoc.app/
-Para mais informações leia o README.md dentro da pasta doc.
+## Descrição do Jogo
 
+Jogo escolhido: PONG
+
+O Pong é um jogo de arcade clássico. 
+Dois jogadores controlam paddles para rebater uma bola de um lado para o outro.  
+A pontuação é marcada quando a bola ultrapassa o paddle do oponente.  
+Se a bola atinge as extremidades laterais da tela, o adversário pontua.  
+O primeiro a atingir uma pontuação predeterminada vence.  
+
+![pong](pong.png)
+
+<!-- incentivando a agilidade e estratégia na defesa e ataque -->
+O jogo promove partidas rápidas e intensas, clássico e icônico desde a era dos arcades.
+
+<!---
+Esse Arquivo deverá ser convertido para se tornar o README.md principal quando for entregue ao professor
+-->
+# Como jogar 
+
+## Definição
+
+Dois jogadores controlam raquetes para rebater uma bola e marcar pontos. Este manual fornecerá instruções sobre como jogar, os controles e algumas informações sobre a implementação do código.
+
+## Objetivo
+
+Marcar mais pontos do que o adversário. Os jogadores ganham pontos quando a bola ultrapassa a raquete do oponente.
+
+## Controles
+
+- **Player 1 (Esquerda):** A raquete esquerda é controlada automaticamente pela inteligência artificial e tenta acompanhar a posição da bola.
+  
+- **Player 2 (Direita):** Use as setas do teclado para cima e para baixo para mover a raquete para cima e para baixo, respectivamente.
+
+## Regras
+
+- A bola rebaterá nas paredes superior e inferior da tela, bem como nas raquetes dos jogadores.
+- Cada vez que a bola ultrapassar a raquete do oponente, o jogador adversário ganhará um ponto.
+- O primeiro jogador a atingir a pontuação de 5, 10, 15, e assim por diante, ganha o jogo.
+- O jogo pausará e reproduzirá um som de vitória quando um jogador vencer.
 
